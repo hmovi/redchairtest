@@ -1,0 +1,124 @@
+/* Red Chair Marketing: Soliton Power look with red accents.
+   Loads after the page's inline <style>, so it only needs to override colours and a few shapes. */
+
+/* ---------- Palette (light) ---------- */
+:root{
+  --bg:#FEFCFA;            /* paper */
+  --ink:#1F1B1A;
+  --mut:#6B5F5C;
+  --glacier:#E7B8AE;       /* soft red tint */
+  --glacier-dark:#8A6A50;  /* sand-deep: light second line in headings */
+  --forest:#1F1B1A;        /* primary pill buttons are ink, like Soliton Power */
+  --forest-deep:#3A2F2D;
+  --ice:#F8E3DF;           /* blush: hover and active tints */
+  --card:#FAEDEA;          /* blush tiles */
+  --line:#EBD9D4;
+  --gold:#BC9A7E;          /* sand */
+  --gold-ink:#8A6A50;
+  --red:#B33C3A;
+  --red-dark:#8F2F2E;
+  --red-ink:#B33C3A;
+  --mut-on-dark:#E8D3CE;
+  --r:28px;
+}
+
+/* ---------- Palette (dark) ---------- */
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme=light]){
+    --bg:#171211;--ink:#F5ECE9;--mut:#C2AFAA;
+    --glacier:#8F4A45;--glacier-dark:#D9B79A;
+    --forest:#BF423F;--forest-deep:#9C3230;
+    --ice:#2E1D1B;--card:#241A18;--line:#43302D;
+    --gold:#C9A27F;--gold-ink:#E4C19E;
+    --red:#C94744;--red-dark:#A63B39;--red-ink:#F28B84;
+    --mut-on-dark:#E8D3CE;
+  }
+}
+:root[data-theme=dark]{
+  --bg:#171211;--ink:#F5ECE9;--mut:#C2AFAA;
+  --glacier:#8F4A45;--glacier-dark:#D9B79A;
+  --forest:#BF423F;--forest-deep:#9C3230;
+  --ice:#2E1D1B;--card:#241A18;--line:#43302D;
+  --gold:#C9A27F;--gold-ink:#E4C19E;
+  --red:#C94744;--red-dark:#A63B39;--red-ink:#F28B84;
+  --mut-on-dark:#E8D3CE;
+}
+
+/* ---------- Base and type ---------- */
+body{background:var(--bg);-webkit-font-smoothing:antialiased}
+h1,h2,h3{letter-spacing:-.035em}
+h1,h2{font-weight:700}
+h1{line-height:1}
+.l{color:var(--glacier-dark)}
+.hero .l{color:#F6C9C2}
+::selection{background:var(--red);color:#fff}
+
+/* ---------- Header and logo ---------- */
+header{border-bottom:1px solid transparent}
+.logo{font-size:28px}
+.logo b{color:var(--red);font-weight:700;letter-spacing:-.04em}
+.logo i{color:var(--ink);font-weight:300}
+.logo small{color:var(--gold-ink)}
+nav a,.dd>button{font-weight:500}
+nav a:hover,.dd>button:hover,nav a.on{background:var(--ice)}
+
+/* ---------- Buttons ---------- */
+.btn{font-weight:600}
+.btn:hover{background:var(--forest-deep);color:#fff}
+.btn.r{background:var(--red);color:#fff}
+.btn.r:hover{background:var(--red-dark);color:#fff}
+.btn.o{box-shadow:inset 0 0 0 1.5px var(--ink);color:var(--ink)}
+.btn.o:hover{background:var(--ink);color:var(--bg)}
+
+/* ---------- Hero: neutral dark with a red wash instead of blue ---------- */
+.hero::after{background:
+  linear-gradient(180deg,rgba(24,10,9,.10),rgba(22,9,8,.84)),
+  linear-gradient(120deg,rgba(179,60,58,.30),rgba(0,0,0,0) 60%)}
+
+/* ---------- Tiles and cards: flat, rounded, no blue-tinted shadows ---------- */
+.card{box-shadow:none;border-radius:28px}
+.card.work-card:hover{box-shadow:none;transform:translateY(-4px)}
+.pc{border-radius:28px;background:var(--ink)}
+.pc::after{background:linear-gradient(transparent 35%,rgba(22,9,8,.80))}
+.about-values .card{border-top:3px solid var(--red);background:var(--bg)}
+.about-quote{border-left-color:var(--red)}
+.split>img,.split>.ph,.about-founder img{border-radius:28px}
+.ph{border-color:var(--glacier)}
+
+/* ---------- Details that carry the red ---------- */
+ul.ck li::before{border-color:var(--red)}
+summary::after{color:var(--red)}
+.steps .card::before{color:var(--red-ink)}
+.steps .card:nth-child(3n+2)::before{color:var(--gold-ink)}
+.steps .card:nth-child(3n)::before{color:var(--ink)}
+.chip{background:var(--gold);color:#1F1B1A}
+.fg a:hover{color:var(--red-ink)}
+label.opt:has(input:checked){border-color:var(--red)}
+label.opt input{accent-color:var(--red)}
+input:focus,select:focus,textarea:focus{border-color:var(--red)}
+:focus-visible{outline-color:var(--red)}
+
+/* ---------- Pricing: featured plan ---------- */
+.pk{background:var(--bg)}
+.pk.f{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pk.f .btn{background:var(--red);color:#fff}
+.pk.f .btn:hover{background:var(--red-dark)}
+
+/* ---------- Call-to-action band: deep red, with the Soliton corner square ---------- */
+.band{
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#2A1312,#7A2624);
+  color:#FBF1EF;border:0;border-radius:40px;box-shadow:none}
+.band::after{content:"";position:absolute;right:-70px;bottom:-70px;width:240px;aspect-ratio:1;background:var(--red);opacity:.9}
+.band>*{position:relative;z-index:1}
+.band .l{color:#F6B9B1}
+.band .mut{color:#E8D3CE}
+.band input,.band select,.band textarea{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.28)}
+.band input::placeholder,.band textarea::placeholder{color:#E8D3CE}
+.band select option{color:#1F1B1A}
+.band .btn.r{background:#FBE4E0;color:#1F1B1A}
+.band .btn.r:hover{background:#fff;color:#1F1B1A}
+.band input:focus,.band select:focus,.band textarea:focus{border-color:#fff}
+
+/* ---------- Footer ---------- */
+footer{border-top:1px solid var(--line)}
