@@ -22,19 +22,15 @@
   --r:28px;
 }
 
-/* ---------- Palette (dark) ---------- */
+/* ---------- Palette (dark, opt-in only) ---------- */
+/* The site stays light even when a visitor's device is set to dark mode.
+   To turn dark on deliberately, set data-theme="dark" on the <html> tag. */
+:root{color-scheme:light}
 @media(prefers-color-scheme:dark){
-  :root:not([data-theme=light]){
-    --bg:#171211;--ink:#F5ECE9;--mut:#C2AFAA;
-    --glacier:#8F4A45;--glacier-dark:#D9B79A;
-    --forest:#BF423F;--forest-deep:#9C3230;
-    --ice:#2E1D1B;--card:#241A18;--line:#43302D;
-    --gold:#C9A27F;--gold-ink:#E4C19E;
-    --red:#C94744;--red-dark:#A63B39;--red-ink:#F28B84;
-    --mut-on-dark:#E8D3CE;
-  }
+  :root:not([data-theme=dark]){--bg:#FEFCFA;--ink:#1F1B1A;--mut:#6B5F5C;--glacier:#E7B8AE;--glacier-dark:#8A6A50;--forest:#1F1B1A;--forest-deep:#3A2F2D;--ice:#F8E3DF;--card:#FAEDEA;--line:#EBD9D4;--gold:#BC9A7E;--gold-ink:#8A6A50;--red:#B33C3A;--red-dark:#8F2F2E;--red-ink:#B33C3A;--mut-on-dark:#E8D3CE;--r:28px;}
 }
 :root[data-theme=dark]{
+  color-scheme:dark;
   --bg:#171211;--ink:#F5ECE9;--mut:#C2AFAA;
   --glacier:#8F4A45;--glacier-dark:#D9B79A;
   --forest:#BF423F;--forest-deep:#9C3230;
@@ -72,14 +68,16 @@ nav a:hover,.dd>button:hover,nav a.on{background:var(--ice)}
 
 /* ---------- Hero: neutral dark with a red wash instead of blue ---------- */
 .hero::after{background:
-  linear-gradient(180deg,rgba(24,10,9,.10),rgba(22,9,8,.84)),
-  linear-gradient(120deg,rgba(179,60,58,.30),rgba(0,0,0,0) 60%)}
+  linear-gradient(180deg,rgba(40,18,16,0) 25%,rgba(40,18,16,.55)),
+  linear-gradient(120deg,rgba(179,60,58,.16),rgba(0,0,0,0) 60%)}
+.hero h1,.hero p{text-shadow:0 2px 20px rgba(30,12,10,.45)}
 
 /* ---------- Tiles and cards: flat, rounded, no blue-tinted shadows ---------- */
 .card{box-shadow:none;border-radius:28px}
 .card.work-card:hover{box-shadow:none;transform:translateY(-4px)}
-.pc{border-radius:28px;background:var(--ink)}
-.pc::after{background:linear-gradient(transparent 35%,rgba(22,9,8,.80))}
+.pc{border-radius:28px;background:var(--ice)}
+.pc::after{background:linear-gradient(transparent 45%,rgba(58,26,22,.62))}
+.pc h3,.pc p{text-shadow:0 1px 14px rgba(30,12,10,.45)}
 .about-values .card{border-top:3px solid var(--red);background:var(--bg)}
 .about-quote{border-left-color:var(--red)}
 .split>img,.split>.ph,.about-founder img{border-radius:28px}
@@ -100,21 +98,22 @@ input:focus,select:focus,textarea:focus{border-color:var(--red)}
 
 /* ---------- Pricing: featured plan ---------- */
 .pk{background:var(--bg)}
-.pk.f{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pk.f{background:var(--card);color:var(--ink);border:2px solid var(--red)}
+.pk.f .mut{color:var(--mut)}
 .pk.f .btn{background:var(--red);color:#fff}
 .pk.f .btn:hover{background:var(--red-dark)}
 
 /* ---------- Call-to-action band: deep red, with the Soliton corner square ---------- */
 .band{
   position:relative;overflow:hidden;
-  background:linear-gradient(135deg,#2A1312,#7A2624);
-  color:#FBF1EF;border:0;border-radius:40px;box-shadow:none}
-.band::after{content:"";position:absolute;right:-70px;bottom:-70px;width:240px;aspect-ratio:1;background:var(--red);opacity:.9}
+  background:linear-gradient(135deg,#B33C3A,#C24D49);
+  color:#fff;border:0;border-radius:40px;box-shadow:none}
+.band::after{content:"";position:absolute;right:-70px;bottom:-70px;width:240px;aspect-ratio:1;background:#fff;opacity:.14}
 .band>*{position:relative;z-index:1}
-.band .l{color:#F6B9B1}
-.band .mut{color:#E8D3CE}
-.band input,.band select,.band textarea{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.28)}
-.band input::placeholder,.band textarea::placeholder{color:#E8D3CE}
+.band .l{color:#FFE3DF}
+.band .mut{color:#FFF1EE}
+.band input,.band select,.band textarea{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.5)}
+.band input::placeholder,.band textarea::placeholder{color:#FFF1EE}
 .band select option{color:#1F1B1A}
 .band .btn.r{background:#FBE4E0;color:#1F1B1A}
 .band .btn.r:hover{background:#fff;color:#1F1B1A}
