@@ -41,7 +41,7 @@ nav a:hover,.dd>button:hover,nav a.on{background:color-mix(in srgb,var(--card) 7
 .dd:hover .m,.dd:focus-within .m,.dd.o .m{display:block}.m a{display:block}
 .btn{display:inline-flex;align-items:center;gap:8px;background:var(--forest);color:#fff;font:600 16px Jost;padding:14px 26px;border-radius:99px;border:0;cursor:pointer;text-decoration:none;transition:transform .2s,background .2s}
 .btn:hover{transform:translateY(-2px);background:var(--forest-deep);color:#fff}.btn.o{background:none;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--forest)}.btn.o:hover{background:var(--forest);color:#fff}.btn.r{background:var(--red);color:#fff}.btn.r:hover{background:var(--red-dark);color:#fff}
-.burger{display:none;background:none;border:0;font-size:28px;color:var(--ink);cursor:pointer}
+.burger{display:none;width:44px;height:44px;padding:8px;background:none;border:0;color:var(--ink);cursor:pointer}.burger::before{content:"";display:block;width:24px;height:18px;background:linear-gradient(var(--ink),var(--ink)) 0 1px/24px 2px no-repeat,linear-gradient(var(--ink),var(--ink)) 0 8px/24px 2px no-repeat,linear-gradient(var(--ink),var(--ink)) 0 15px/24px 2px no-repeat}
 :focus-visible{outline:3px solid var(--forest);outline-offset:3px}
 .hero{position:relative;color:#fff;min-height:88vh;display:flex;align-items:flex-end;padding:0;overflow:hidden}
 .hero>video,.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -71,7 +71,7 @@ nav a:hover,.dd>button:hover,nav a.on{background:color-mix(in srgb,var(--card) 7
 .about-founder-copy{max-width:58ch}
 .about-founder img{width:100%;aspect-ratio:4/5;max-height:620px;object-fit:cover;border-radius:var(--r)}
 .about-quote{padding-left:22px;border-left:3px solid var(--gold);font-size:clamp(20px,2.4vw,28px);line-height:1.4;font-weight:500}
-@media(max-width:900px){.about-founder{grid-template-columns:1fr}.about-founder img{max-height:560px;aspect-ratio:4/3}}
+@media(max-width:900px){header{backdrop-filter:none}.about-founder{grid-template-columns:1fr}.about-founder img{max-height:560px;aspect-ratio:4/3}}
 .tags{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
 .tag{border:1.5px solid var(--line);background:none;color:var(--ink);padding:9px 18px;border-radius:99px;font:500 15px Jost;cursor:pointer}.tag.on,.tag:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 ul.ck{list-style:none;padding:0;margin:0 0 1em}ul.ck li{padding:7px 0 7px 30px;position:relative}ul.ck li::before{content:"";position:absolute;left:0;top:14px;width:14px;height:8px;border-left:2.5px solid var(--forest);border-bottom:2.5px solid var(--forest);transform:rotate(-45deg)}
@@ -97,7 +97,7 @@ nav{position:fixed;inset:calc(70px + env(safe-area-inset-top,0px)) 0 0 0;backgro
 <link rel="stylesheet" href="theme.css">
 </head><body>
 <header><div class="w nav"><a class="logo" href="#home" aria-label="Red Chair Marketing home"><span><b>Red</b> <i>Chair</i></span><small>MARKETING</small></a>
-<button class="burger" id="bg" aria-label="Menu" aria-expanded="false">☰</button>
+<button class="burger" id="bg" aria-label="Menu" aria-expanded="false"></button>
 <nav id="nv"><a href="#home">Home</a><div class="dd"><button aria-haspopup="true">Services ▾</button><div class="m"><a href="#seo">SEO</a><a href="#website">Website development</a><a href="#social">Social media management</a><a href="#ecommerce">E-commerce management</a><a href="#content">Content creation</a><a href="#merchandise">Merchandise</a></div></div><a href="#work">Our work</a><a href="#about">About</a><a href="#pricing">Pricing</a><a class="btn r" href="#pricing" data-c style="color:#fff;margin-left:6px">Get a free audit</a></nav></div></header>
 <main id="m"></main>
 <footer><div class="w"><div class="fg"><div><a class="logo" href="#home" style="padding:0"><span><b>Red</b> <i>Chair</i></span><small>MARKETING</small></a><p class="mut" style="margin-top:16px;max-width:32ch">Digital marketing for small and medium-sized businesses in Vancouver, Whistler and Squamish, BC.</p></div>
