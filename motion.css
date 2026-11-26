@@ -48,16 +48,6 @@ html.rc-motion nav .btn.r{animation:rc-pulse-btn 3.2s ease-out infinite}
 .card:hover::before{opacity:1}
 @media(hover:hover){html.rc-motion .card:hover{transform:translateY(-5px)}}
 
-/* ---------- Marquee ---------- */
-.mq-sec{padding:0!important;background:var(--forest,#1F1B1A);color:#fff;overflow:hidden;border-block:1px solid rgba(255,255,255,.08)}
-.mq{display:flex;width:max-content;padding:20px 0}
-.mq ul{display:flex;gap:0;margin:0;padding:0;list-style:none;flex-shrink:0}
-.mq li{display:flex;align-items:center;font:600 clamp(18px,2.4vw,28px) Jost,system-ui,sans-serif;letter-spacing:-.01em;white-space:nowrap;padding:0 28px}
-.mq li::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--red,#B33C3A);margin-left:56px}
-@keyframes rc-marq{to{transform:translate3d(-50%,0,0)}}
-html.rc-motion .mq{animation:rc-marq 38s linear infinite}
-.mq-sec:hover .mq{animation-play-state:paused}
-
 /* ---------- Globe ---------- */
 .globe-sec{background:radial-gradient(120% 90% at 80% 20%,#2c2220 0%,#1F1B1A 55%,#141110 100%);color:#fff;position:relative;overflow:hidden}
 .globe-sec h2{color:#fff}.globe-sec .l{color:var(--glacier,#E7B8AE)}
