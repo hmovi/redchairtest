@@ -121,3 +121,11 @@ input:focus,select:focus,textarea:focus{border-color:var(--red)}
 
 /* ---------- Footer ---------- */
 footer{border-top:1px solid var(--line)}
+
+/* ---------- Homepage layout ---------- */
+.home-region-grid .pc,.home-service-grid .pc{aspect-ratio:16/10}
+@media(max-width:560px){
+  .home-service-grid .pc div{padding:clamp(16px,4vw,22px)}
+  .home-service-grid .pc h3{font-size:clamp(18px,4.8vw,22px)}
+  .home-service-grid .pc p{font-size:14px;line-height:1.4}
+}
