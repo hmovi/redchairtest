@@ -1,7 +1,6 @@
 /* Red Chair Marketing: motion layer (no dependencies except the self-hosted globe bundle). */
 (function(){
 'use strict';
-window.__rcForm=true;
 var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 var root=document.documentElement;
 var $=function(s,e){return (e||document).querySelector(s)};
@@ -74,34 +73,6 @@ function splitHero(){
       }else if(c.nodeType===1)walk(c);
     });
   })(h);
-}
-
-/* ---------- Form handler (posts to /api/contact) ---------- */
-function bindForms(){
-  $$('#m form').forEach(function(f){
-    if(f.dataset.rc)return;f.dataset.rc='1';
-    f.addEventListener('submit',function(e){
-      e.preventDefault();
-      var d=new FormData(f),n=String(d.get('n')||'').trim(),m=String(d.get('e')||'').trim(),er=$('.err',f),btn=$('button[type=submit]',f);
-      if(!n){er.textContent='Please enter your name.';return}
-      if(!/^\S+@\S+\.\S+$/.test(m)){er.textContent='Please enter a valid email address.';return}
-      er.textContent='';
-      var payload={name:n,email:m,service:d.get('s')||'',message:String(d.get('b')||''),website:String(d.get('website')||''),page:location.href};
-      var label=btn.textContent;btn.disabled=true;btn.textContent='Sending…';
-      fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
-        .then(function(r){return r.json().catch(function(){return{}}).then(function(j){if(!r.ok||!j.ok)throw new Error(j.error||'failed')})})
-        .then(function(){
-          var safe=n.replace(/[<>&"]/g,'');
-          f.innerHTML='<div class="f-ok"><h3>Thanks, '+safe+'.</h3><p class="mut">Your request is on its way to the Red Chair team. We will be in touch at the email you gave us.</p></div>';
-        })
-        .catch(function(){
-          btn.disabled=false;btn.textContent=label;
-          var body='Name: '+n+'\nEmail: '+m+'\nService: '+(payload.service)+'\n\n'+payload.message;
-          var href='mailto:hello@redchairmarketing.ca?subject='+encodeURIComponent('Project inquiry: '+payload.service)+'&body='+encodeURIComponent(body);
-          er.innerHTML='We could not send that just now. Please try again, or <a href="'+href+'">email us directly</a>.';
-        });
-    });
-  });
 }
 
 /* ---------- Globe ---------- */
@@ -260,7 +231,7 @@ var mo=null,lastHTML=null;
 function mount(){
   var m=$('#m');if(!m)return;
   m.classList.remove('pg');void m.offsetWidth;if(!reduce)m.classList.add('pg');
-  splitHero();reveal();bindForms();initGlobe();initEcom();onScroll();
+  splitHero();reveal();initGlobe();initEcom();onScroll();
 }
 var m=$('#m');
 if(m){
