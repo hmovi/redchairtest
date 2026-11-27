@@ -109,12 +109,45 @@ function initEcom(){
   run();
 }
 
+
+/* ---------- Home: rotating Medium blog carousel ---------- */
+function initBlog(){
+  var bl=$('#bl');if(!bl||bl.dataset.on)return;bl.dataset.on='1';
+  var cards=$$('.bl-card',bl),dots=$$('.bl-dot',bl),n=cards.length,cur=0,ms=6500,t=null,hover=false,seen=false;
+  bl.style.setProperty('--bl-ms',ms+'ms');
+  function show(i){
+    cur=(i+n)%n;
+    cards.forEach(function(c,k){var p=(k-cur+n)%n;c.dataset.p=p;c.setAttribute('aria-hidden',p?'true':'false');c.tabIndex=p?-1:0});
+    dots.forEach(function(d,k){d.classList.toggle('on',k===cur);d.setAttribute('aria-current',k===cur?'true':'false')});
+    // restart the progress fill on the active dot
+    bl.classList.remove('run');void bl.offsetWidth;if(!reduce&&seen)bl.classList.add('run');
+    schedule();
+  }
+  function schedule(){clearTimeout(t);if(reduce||hover||!seen||!document.body.contains(bl))return;t=setTimeout(function(){show(cur+1)},ms)}
+  cards.forEach(function(c,k){c.addEventListener('click',function(e){if(c.dataset.p!=='0'){e.preventDefault();show(k)}})});
+  dots.forEach(function(d,k){d.addEventListener('click',function(){show(k)})});
+  $$('.bl-arr',bl).forEach(function(a){a.addEventListener('click',function(){show(cur+ +a.dataset.d)})});
+  bl.addEventListener('mouseenter',function(){hover=true;bl.classList.add('paused');clearTimeout(t)});
+  bl.addEventListener('mouseleave',function(){hover=false;bl.classList.remove('paused');show(cur)});
+  bl.addEventListener('focusin',function(){hover=true;clearTimeout(t)});
+  bl.addEventListener('focusout',function(){hover=false;schedule()});
+  bl.tabIndex=0;
+  bl.addEventListener('keydown',function(e){if(e.key==='ArrowRight'){show(cur+1)}else if(e.key==='ArrowLeft'){show(cur-1)}});
+  // swipe on touch screens
+  var sx=null;
+  bl.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
+  bl.addEventListener('touchend',function(e){if(sx===null)return;var dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>40)show(cur+(dx<0?1:-1));sx=null},{passive:true});
+  // only rotate while the section is on screen
+  new IntersectionObserver(function(es){seen=es[0].isIntersecting;if(seen)show(cur);else{clearTimeout(t);bl.classList.remove('run')}},{threshold:.3}).observe(bl);
+  show(0);
+}
+
 /* ---------- Mount on every route render ---------- */
 var mo=null,lastHTML=null;
 function mount(){
   var m=$('#m');if(!m)return;
   m.classList.remove('pg');void m.offsetWidth;if(!reduce)m.classList.add('pg');
-  splitHero();reveal();initEcom();onScroll();
+  splitHero();reveal();initEcom();initBlog();onScroll();
 }
 var m=$('#m');
 if(m){
