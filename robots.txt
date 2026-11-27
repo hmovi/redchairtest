@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://redchairmarketing.ca/sitemap.xml
+Sitemap: https://www.redchairmarketing.ca/sitemap.xml
