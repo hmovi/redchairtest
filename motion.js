@@ -1,4 +1,4 @@
-/* Red Chair Marketing: motion layer (no dependencies except the self-hosted globe bundle). */
+/* Red Chair Marketing: motion layer (no dependencies). */
 (function(){
 'use strict';
 var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -47,9 +47,9 @@ function reveal(){
   if(reduce||!('IntersectionObserver' in window))return;
   if(io)io.disconnect();
   io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.1,rootMargin:'0px 0px -5% 0px'});
-  var sel='main section:not(.hero):not(.mq-sec) .w>*, main .g>*, main .split>*, main .globe-grid>*, main .ecom-grid>*';
+  var sel='main section:not(.hero):not(.mq-sec) .w>*, main .g>*, main .split>*, main .ecom-grid>*';
   $$(sel).forEach(function(el,n){
-    if(el.closest('.hero')||el.matches('.g,.split,.globe-grid,.ecom-grid,.ec-grid'))return;
+    if(el.closest('.hero')||el.matches('.g,.split,.ecom-grid,.ec-grid'))return;
     var sib=el.parentNode?[].indexOf.call(el.parentNode.children,el):0;
     el.classList.add('rv');el.style.setProperty('--i',Math.min(sib,5));io.observe(el);
   });
@@ -73,123 +73,6 @@ function splitHero(){
       }else if(c.nodeType===1)walk(c);
     });
   })(h);
-}
-
-/* ---------- Globe ---------- */
-var geoP=null;
-function loadGeo(){
-  if(geoP)return geoP;
-  geoP=new Promise(function(res,rej){
-    function go(){fetch('assets/globe/land-50m.json').then(function(r){return r.json()}).then(function(t){res(window.RCGeo.feature(t,t.objects.land))}).catch(rej)}
-    if(window.RCGeo)return go();
-    var s=document.createElement('script');s.src='assets/globe/globe.bundle.js';s.onload=go;s.onerror=rej;document.head.appendChild(s);
-  });
-  return geoP;
-}
-var CITIES=[
-  {n:'Vancouver',c:[-123.1207,49.2827],t:'Startups, studios, restaurants and retailers competing for local search.'},
-  {n:'Squamish',c:[-123.1558,49.7016],t:'Outdoor brands, guides, builders and trades at the start of the Sea to Sky.'},
-  {n:'Whistler',c:[-122.9574,50.1163],t:'Resorts, lodges, tour operators and seasonal businesses that need to be found first.'}
-];
-var STOPS=[
-  {id:'all',lon:-128,lat:42,z:.42,spin:true,hold:3200,fly:0,label:'The Sea to Sky corridor',text:'Three places, one local team. Watch the globe fly in.'},
-  {id:'reg',lon:-123.15,lat:49.7,z:19,hold:2000,fly:2600,label:'Vancouver to Whistler',text:'About 120 km of highway, ocean and mountains. This is where we live and work.'},
-  {id:'van',city:0,lon:-123.1207,lat:49.2827,z:34,hold:3400,fly:1900},
-  {id:'squ',city:1,lon:-123.1558,lat:49.7016,z:34,hold:3400,fly:1900},
-  {id:'whi',city:2,lon:-122.9574,lat:50.1163,z:34,hold:3400,fly:1900}
-];
-function initGlobe(){
-  var cv=$('#gc');if(!cv||cv.dataset.on)return;cv.dataset.on='1';
-  var ctx=cv.getContext('2d'),loading=$('#gl'),info=$('#gi'),tabs=$$('#gt button');
-  var land=null,W=0,H=0,dpr=1,size=0;
-  var view={lon:-150,lat:42,s:Math.log(1)},stopIdx=0,tween=null,holdUntil=0,visible=false,raf=0,t0=performance.now(),manualUntil=0;
-  function resize(){var r=cv.getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,2);W=Math.max(1,r.width);H=Math.max(1,r.height);size=Math.min(W,H);cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);if(land&&(!visible||reduce))draw(performance.now())}
-  function S(logz){return size*Math.exp(logz)}
-  function setInfo(i){
-    var st=STOPS[i],h,p;
-    if(st.city!=null){h=CITIES[st.city].n;p=CITIES[st.city].t}else{h=st.label;p=st.text}
-    info.classList.remove('sw');void info.offsetWidth;info.classList.add('sw');
-    info.innerHTML='<h3></h3><p></p>';info.firstChild.textContent=h;info.lastChild.textContent=p;
-    tabs.forEach(function(b){b.setAttribute('aria-pressed',String(+b.dataset.city===st.city))});
-  }
-  function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
-  function flyTo(i,now,instant){
-    var st=STOPS[i],lz=Math.log(st.z),dist=Math.hypot(st.lon-view.lon,st.lat-view.lat);
-    stopIdx=i;setInfo(i);
-    if(instant||!st.fly&&i!==0){view.lon=st.lon;view.lat=st.lat;view.s=lz;tween=null;holdUntil=now+st.hold;return}
-    var dur=st.fly||2200;
-    tween={a:{lon:view.lon,lat:view.lat,s:view.s},b:{lon:st.lon,lat:st.lat,s:lz},t0:now,dur:dur,arc:clamp(dist/6,.35,1.1)};
-    holdUntil=now+dur+st.hold;
-  }
-  function step(now){
-    if(tween){
-      var t=clamp((now-tween.t0)/tween.dur,0,1),e=ease(t);
-      var dl=tween.b.lon-tween.a.lon;if(dl>180)dl-=360;if(dl<-180)dl+=360;
-      view.lon=tween.a.lon+dl*e;view.lat=tween.a.lat+(tween.b.lat-tween.a.lat)*e;
-      view.s=tween.a.s+(tween.b.s-tween.a.s)*e-tween.arc*Math.sin(Math.PI*t)*1.1;
-      if(t>=1)tween=null;
-    }else if(STOPS[stopIdx].spin){view.lon+=0.06;}
-    if(now>holdUntil&&now>manualUntil&&!reduce){flyTo((stopIdx+1)%STOPS.length,now)}
-  }
-  function draw(now){
-    var G=window.RCGeo;if(!G||!land)return;
-    var sc=S(view.s),proj=G.geoOrthographic().rotate([-view.lon,-view.lat]).scale(sc).translate([W/2,H/2]).clipAngle(90).precision(.3);
-    var path=G.geoPath(proj,ctx),far=sc<size*1.4;
-    ctx.clearRect(0,0,W,H);
-    if(far){var gl=ctx.createRadialGradient(W/2,H/2,sc*.92,W/2,H/2,sc*1.12);gl.addColorStop(0,'rgba(231,184,174,.38)');gl.addColorStop(1,'rgba(231,184,174,0)');ctx.fillStyle=gl;ctx.beginPath();ctx.arc(W/2,H/2,sc*1.12,0,7);ctx.fill()}
-    // ocean
-    var og=ctx.createRadialGradient(W/2-sc*.3,H/2-sc*.35,sc*.1,W/2,H/2,sc*1.05);og.addColorStop(0,'#27425a');og.addColorStop(1,'#0c1620');
-    ctx.fillStyle=og;ctx.beginPath();path({type:'Sphere'});ctx.fill();
-    // graticule
-    ctx.strokeStyle='rgba(255,255,255,'+(far?.07:.05)+')';ctx.lineWidth=1;ctx.beginPath();path(G.geoGraticule10());ctx.stroke();
-    // land
-    ctx.beginPath();path(land);ctx.fillStyle='#2f4a3c';ctx.fill();
-    ctx.lineWidth=far?.7:1.4;ctx.strokeStyle='rgba(222,196,170,.75)';ctx.stroke();
-    // shading
-    if(far){var sh=ctx.createRadialGradient(W/2-sc*.25,H/2-sc*.3,sc*.2,W/2,H/2,sc);sh.addColorStop(0,'rgba(255,255,255,.10)');sh.addColorStop(.7,'rgba(0,0,0,0)');sh.addColorStop(1,'rgba(0,0,0,.55)');ctx.fillStyle=sh;ctx.beginPath();path({type:'Sphere'});ctx.fill();
-      ctx.strokeStyle='rgba(231,184,174,.55)';ctx.lineWidth=1.5;ctx.beginPath();path({type:'Sphere'});ctx.stroke()}
-    // route
-    var zl=sc/size,routeA=clamp((zl-6)/6,0,1);
-    if(routeA>0){
-      ctx.save();ctx.globalAlpha=routeA;ctx.strokeStyle='#E7B8AE';ctx.lineWidth=2;ctx.setLineDash([7,7]);ctx.lineDashOffset=-(now/60)%14;
-      ctx.beginPath();path({type:'LineString',coordinates:[CITIES[0].c,CITIES[1].c,CITIES[2].c]});ctx.stroke();ctx.restore();
-    }
-    // pins
-    var active=STOPS[stopIdx].city,tt=now/1000;
-    CITIES.forEach(function(c,i){
-      if(G.geoDistance(c.c,[view.lon,view.lat])>1.45)return;
-      var p=proj(c.c);if(!p)return;
-      var lblA=clamp((zl-4)/5,0,1),isA=active===i,R=isA?7:5.5;
-      var pr=(tt*0.9+i*.33)%1;
-      ctx.beginPath();ctx.arc(p[0],p[1],R+pr*(isA?26:18),0,7);ctx.strokeStyle='rgba(179,60,58,'+(.55*(1-pr))+')';ctx.lineWidth=2;ctx.stroke();
-      ctx.beginPath();ctx.arc(p[0],p[1],R+2.5,0,7);ctx.fillStyle='#fff';ctx.fill();
-      ctx.beginPath();ctx.arc(p[0],p[1],R,0,7);ctx.fillStyle='#B33C3A';ctx.fill();
-      if(lblA>0.02){
-        ctx.save();ctx.globalAlpha=lblA;ctx.font='600 '+(isA?17:14)+'px Jost,system-ui,sans-serif';ctx.textBaseline='middle';
-        var tw=ctx.measureText(c.n).width,lx=p[0]+R+10,ly=p[1];
-        if(lx+tw+16>W)lx=p[0]-R-10-tw-16;
-        ctx.fillStyle='rgba(20,17,16,.78)';var bw=tw+16,bh=26;ctx.beginPath();ctx.roundRect?ctx.roundRect(lx,ly-bh/2,bw,bh,13):ctx.rect(lx,ly-bh/2,bw,bh);ctx.fill();
-        ctx.fillStyle='#fff';ctx.fillText(c.n,lx+8,ly+.5);ctx.restore();
-      }
-    });
-    if(far){var bc=proj([-123.1,49.3]);if(bc&&G.geoDistance([-123.1,49.3],[view.lon,view.lat])<1.4){/* BC marker handled by Vancouver pin */}}
-  }
-  function frame(now){
-    raf=0;if(!visible||document.hidden)return;
-    step(now);draw(now);raf=requestAnimationFrame(frame);
-  }
-  function start(){if(!raf&&visible&&!reduce)raf=requestAnimationFrame(frame)}
-  function manual(ci){
-    var idx=STOPS.findIndex(function(s){return s.city===ci}),now=performance.now();
-    manualUntil=now+9000;flyTo(idx,now,reduce);holdUntil=now+(STOPS[idx].fly||0)+9000;
-    if(reduce){draw(now)}
-  }
-  tabs.forEach(function(b){b.addEventListener('click',function(){manual(+b.dataset.city)})});
-  var ro=window.ResizeObserver?new ResizeObserver(resize):null;if(ro)ro.observe(cv);else addEventListener('resize',resize);
-  resize();setInfo(0);
-  var vio=new IntersectionObserver(function(es){visible=es[0].isIntersecting;if(visible){if(!land)loadGeo().then(function(l){land=l;loading.classList.add('off');var n=performance.now();if(reduce){flyTo(1,n,true);draw(n)}else{view.lon=-150;flyTo(0,n,true);holdUntil=n+STOPS[0].hold}start()}).catch(function(){loading.textContent='Globe unavailable'});else start()}},{threshold:.15,rootMargin:'120px'});
-  vio.observe(cv);
-  document.addEventListener('visibilitychange',function(){if(!document.hidden)start()});
 }
 
 /* ---------- E-commerce demo ---------- */
@@ -231,7 +114,7 @@ var mo=null,lastHTML=null;
 function mount(){
   var m=$('#m');if(!m)return;
   m.classList.remove('pg');void m.offsetWidth;if(!reduce)m.classList.add('pg');
-  splitHero();reveal();initGlobe();initEcom();onScroll();
+  splitHero();reveal();initEcom();onScroll();
 }
 var m=$('#m');
 if(m){
