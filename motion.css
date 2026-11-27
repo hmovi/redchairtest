@@ -143,6 +143,8 @@ form .btn[disabled]{opacity:.65;cursor:progress}
 .bl-card[data-p="0"]{transform:translateX(0) translateZ(0) rotateY(0);z-index:3;opacity:1}
 .bl-card[data-p="1"]{transform:translateX(62%) translateZ(-260px) rotateY(-38deg);z-index:2;opacity:.75;filter:saturate(.7)}
 .bl-card[data-p="2"]{transform:translateX(-62%) translateZ(-260px) rotateY(38deg);z-index:2;opacity:.75;filter:saturate(.7)}
+.bl-card[data-p="r"]{transform:translateX(110%) translateZ(-520px) rotateY(-50deg);z-index:1;opacity:0;pointer-events:none}
+.bl-card[data-p="l"]{transform:translateX(-110%) translateZ(-520px) rotateY(50deg);z-index:1;opacity:0;pointer-events:none}
 .bl-card[data-p="0"]:hover{box-shadow:0 36px 70px rgba(31,27,26,.22)}
 .bl-card[data-p="0"]:hover .bl-go b{transform:translateX(5px)}
 .bl-card:not([data-p="0"]){cursor:pointer}
@@ -159,10 +161,11 @@ form .btn[disabled]{opacity:.65;cursor:progress}
 .bl-body p{color:var(--mut);margin:0 0 16px;font-size:16px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .bl-go{font-weight:600;color:var(--red-ink)}.bl-go b{display:inline-block;transition:transform .25s}
 .bl-ctl{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:8px}
+.bl-dot.on{width:44px}.bl-dot{transition:width .3s}
 .bl-arr{font-family:inherit;width:46px;height:46px;border-radius:50%;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font-size:18px;cursor:pointer;transition:background .25s,color .25s,border-color .25s}
 .bl-arr:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.bl-dots{display:flex;gap:10px}
-.bl-dot{width:44px;height:6px;padding:0;border:0;border-radius:99px;background:var(--line);overflow:hidden;cursor:pointer}
+.bl-dots{display:flex;gap:8px}
+.bl-dot{width:28px;height:6px;padding:0;border:0;border-radius:99px;background:var(--line);overflow:hidden;cursor:pointer}
 .bl-dot span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--glacier),var(--red))}
 .bl-dot.on span{width:100%}
 .bl.run .bl-dot.on span{width:0;animation:blfill var(--bl-ms,6500ms) linear forwards}
@@ -173,5 +176,5 @@ form .btn[disabled]{opacity:.65;cursor:progress}
   .bl-card[data-p="1"]{transform:translateX(30%) translateZ(-300px) rotateY(-30deg);opacity:.45}
   .bl-card[data-p="2"]{transform:translateX(-30%) translateZ(-300px) rotateY(30deg);opacity:.45}
 }
-@media(max-width:520px){.bl-stage{height:520px}.bl-body{padding:18px 20px 22px}}
+@media(max-width:520px){.bl-stage{height:520px}.bl-body{padding:18px 20px 22px}.bl-ctl{gap:10px}.bl-dots{gap:5px}.bl-dot{width:14px}.bl-dot.on{width:30px}.bl-arr{width:40px;height:40px;flex:0 0 auto}}
 @media(prefers-reduced-motion:reduce){.bl-card{transition:opacity .2s!important}.bl-card:not([data-p="0"]){opacity:0;pointer-events:none}.bl-card{transform:none!important}}

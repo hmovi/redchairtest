@@ -117,7 +117,7 @@ function initBlog(){
   bl.style.setProperty('--bl-ms',ms+'ms');
   function show(i){
     cur=(i+n)%n;
-    cards.forEach(function(c,k){var p=(k-cur+n)%n;c.dataset.p=p;c.setAttribute('aria-hidden',p?'true':'false');c.tabIndex=p?-1:0});
+    cards.forEach(function(c,k){var d=(k-cur+n)%n;if(d>n/2)d-=n;var p=d===0?'0':d===1?'1':d===-1?'2':d>0?'r':'l';c.dataset.p=p;c.setAttribute('aria-hidden',d?'true':'false');c.tabIndex=d?-1:0});
     dots.forEach(function(d,k){d.classList.toggle('on',k===cur);d.setAttribute('aria-current',k===cur?'true':'false')});
     // restart the progress fill on the active dot
     bl.classList.remove('run');void bl.offsetWidth;if(!reduce&&seen)bl.classList.add('run');
